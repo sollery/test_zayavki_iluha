@@ -1,0 +1,11 @@
+{% extends '_base.html' %}
+{% block title %}Главная{% endblock title %}
+{%block content%}
+<h1 class = "title-page">Главная</h1>
+    <div>
+      {% if user.is_authenticated %}
+        <p>hi {{user.email}}</p>
+            <a class="nav-link"  href="{% url 'private_office' customer.id  %}">Личный кабинет</a>
+      {% endif %}
+    </div>
+{%endblock content%}

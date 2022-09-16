@@ -1,0 +1,57 @@
+{% extends '_base.html' %}
+{% block title %}Оформление заявки{% endblock title %}
+{%block content%}
+<h1 class = "title-page">Заполните данные</h1>
+<!--<div class="row">-->
+<!--    <div class="col-md-8 offset-md-2 zayavka_cont">-->
+        {%if application_obj%}
+<table class="table">
+  <thead>
+   <tr>
+    <th>Номер</th>
+    <th>Название услуги</th>
+    <th>Кол-во</th>
+    <th>Комментарий</th>
+   </tr>
+  </thead>
+   <tbody>
+     <form action="" class="postcard" method="post">{% csrf_token %}
+         {% for emp in application_obj %}
+            <td>{{ forloop.counter }} </td>
+            <td>{{emp.employee.title}}</td>
+         <td>
+              <div class="number">
+                <button class="btn btn-secondary" type="button" onclick="this.nextElementSibling.stepDown(); this.nextElementSibling.onchange();">-</button>
+                  <input id="number" type="number" min="0" max="99" value="0" name="{{emp.employee.id}}" readonly>
+                <button class="btn btn-secondary" type="button" onclick="this.previousElementSibling.stepUp(); this.previousElementSibling.onchange();">+</button>
+          </div>
+         </td>
+            <td><textarea id="w3review" name="{{emp.employee.id}}" style="width:250px; height:80px;"></textarea></td>
+            <td>{{temp.comment}}</td>
+          </tr>
+            {% endfor %}
+          <label for="date">Выберите дату: <input type="date" id="date" name="date" value="{{date_now}}"
+       min="{{date_now}}"></label>
+         <input type="submit" class="btn btn-dark btn_form" value="Создать заявку">
+      </form>
+   </tbody>
+   </table>
+<!--      <form action="" class="postcard" method="post">{% csrf_token %}-->
+<!--            {% for emp in application_obj %}-->
+<!--            <div class="zayavka_div">-->
+<!--                <label>{{emp.employee.title}}-->
+<!--&lt;!&ndash;                    <input id="number" type="number" min="0" max="99" value="0" name="{{emp.employee.id}}">&ndash;&gt;-->
+<!--                </label>-->
+<!--&lt;!&ndash;                <textarea id="w3review" name="{{emp.employee.id}}" style="width:300px; height:100px;"></textarea>&ndash;&gt;-->
+<!--            {%endfor%}-->
+<!--                <label for="date">Выберите дату<input type="date" id="date" name="date" value="{{date_now}}"-->
+<!--       min="{{date_now}}"></label>-->
+<!--                <input type="submit" value="Создать заявку">-->
+<!--            </div>-->
+<!--   </form>-->
+        {%else%}
+        <h1>Вы еще не добавили к объекту рабочих</h1>
+        {%endif%}
+
+
+{%endblock content%}

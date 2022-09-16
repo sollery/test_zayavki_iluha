@@ -1,0 +1,16 @@
+{% extends '_base.html' %}
+{% block title %}Личный кабинет{% endblock title %}
+{%block content%}
+<h1 class = "title-page">Личный кабинет</h1>
+<p>Приветствую в личном кабинете:</p>
+{% if user.is_superuser %}
+            <a class="nav-link" href ="http://127.0.0.1:8000/admin/">Админка</a>
+            <a class="nav-link" href ="{% url 'zayavki_list' %}">посмотреть все заявки</a>
+{%else%}
+<p>Название подразделения:{{subdivision_user.title}}</p>
+<ul>
+<li><a class="text-decoration-none" href="{% url 'subdivision_objects' subdivision_user.id  %}">оформить заявку</a></li>
+<li><a href ="{% url 'zayavki_list' %}">посмотреть мои заявки</a></li>
+</ul>
+{% endif %}
+{%endblock content%}
