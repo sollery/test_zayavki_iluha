@@ -28,8 +28,8 @@ class Position(models.Model):
 class CustomUser(AbstractUser):
     email = models.EmailField(('email address'), unique=True)
     fio = models.CharField('ФИО', max_length=255, default='')
-    subdivision = models.ForeignKey(Subdivision, on_delete=models.CASCADE, related_name='user_subdivision', null=True)
-    position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name='user_position', null=True)
+    subdivision = models.ForeignKey(Subdivision, on_delete=models.CASCADE, related_name='user_subdivision', null=True,default=None)
+    position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name='user_position', null=True,default=None)
 
     def __str__(self):
         return self.fio

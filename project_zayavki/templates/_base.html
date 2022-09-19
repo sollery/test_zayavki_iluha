@@ -10,15 +10,32 @@
     <link rel="stylesheet" href="{% static 'css/test.css' %}">
 </head>
 <body>
-<a class="nav-link" href="{% url 'home' %}">Главная</a>
-   {% if user.is_authenticated %}
-        <a class="nav-link" href="{% url 'logout' %}">Выйти</a>
-      {% else %}
-          <a class="nav-link" href="{% url 'login' %}">Войти</a>
-      {% endif %}
-{% if user.is_superuser %}
-          <a class="nav-link" href ="http://127.0.0.1:8000/admin/">Админка</a>
-{% endif %}
+<!--<a class="nav-link" href="{% url 'home' %}">Главная</a>-->
+<!--   {% if user.is_authenticated %}-->
+<!--        <a class="nav-link" href="{% url 'logout' %}">Выйти</a>-->
+<!--      {% else %}-->
+<!--          <a class="nav-link" href="{% url 'login' %}">Войти</a>-->
+<!--      {% endif %}-->
+<!--{% if user.is_superuser %}-->
+<!--          <a class="nav-link" href ="http://localhost:8000/admin/">Админка</a>-->
+<!--{% endif %}-->
+
+<div class="sidenav">
+    <img class="logo" src="https://retail.oaovoentorg.ru/netcat_files/c/logo_retail.png">
+    <a class="nav-link"  href="{% url 'private_office' user.id  %}">Главная</a>
+    {% if user.is_superuser %}
+        <a class="nav-link" href ="http://localhost:8000/admin/">Админка</a>
+        <a class="nav-link" href ="{% url 'zayavki_list' %}">Просмотр заявок</a>
+    {%else%}
+    <a class="text-decoration-none" href="{% url 'subdivision_objects' user.id  %}">Оформить заявку</a>
+    <a href ="{% url 'zayavki_list' %}">Просмотр заявок</a>
+    {%endif%}
+        {% if user.is_authenticated %}
+    <a href="{% url 'logout' %}">Выйти</a>
+        {% else %}
+    <a href="{% url 'login' %}">Войти</a>
+        {% endif %}
+</div>
     <div class="container">
             {% block content %}
 
@@ -31,3 +48,4 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
+

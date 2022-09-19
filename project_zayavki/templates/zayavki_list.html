@@ -2,28 +2,55 @@
 {% block title %}Список заявок{% endblock title %}
 {%block content%}
 <h1 class = "title-page">Заявки</h1>
+<!--{%if zayavki%}-->
+<!--<table class="table">-->
+<!--  <thead>-->
+<!--   <tr>-->
+<!--    <th>Номер</th>-->
+<!--    <th>Дата оказания услуг</th>-->
+<!--    <th>Должность</th>-->
+<!--     <th>Заказчик</th>-->
+<!--    <th>Объект Заказчика</th>-->
+<!--    <th>Количество услуг</th>-->
+<!--    <th>Обоснование заявки</th>-->
+<!--   </tr>-->
+<!--  </thead>-->
+<!--   <tbody>-->
+<!--     {% for temp in zayavki %}-->
+<!--        <td>{{forloop.counter}} </td>-->
+<!--        <td>{{temp.data_application}}</td>-->
+<!--        <td>{{temp.customer.position}}</td>-->
+<!--        <td>{{temp.customer.fio}}</td>-->
+<!--        <td>{{temp.employee}}</td>-->
+<!--        <td>{{temp.employee_count}}</td>-->
+<!--        <td>{{temp.comment}}</td>-->
+<!--      </tr>-->
+<!--     {% endfor %}-->
+<!--   </tbody>-->
+<!--   </table>-->
+<!--{%else%}-->
+<!--<h1>ваш список пуст</h1>-->
+<!--{%endif%}-->
 {%if zayavki%}
 <table class="table">
   <thead>
    <tr>
     <th>Номер</th>
-    <th>Дата оказания услуг</th>
-    <th>Должность</th>
-     <th>Заказчик</th>
-    <th>Объект Заказчика</th>
-    <th>Количество услуг</th>
-    <th>Обоснование заявки</th>
+    <th>Дата создания</th>
+    <th>Подразделение</th>
+     <th>Дата исполнения</th>
+     <th>Статус</th>
+     <th></th>
    </tr>
   </thead>
    <tbody>
      {% for temp in zayavki %}
-        <td>{{forloop.counter}} </td>
-        <td>{{temp.data_application}}</td>
-        <td>{{temp.customer.position}}</td>
-        <td>{{temp.customer.fio}}</td>
-        <td>{{temp.employee}}</td>
-        <td>{{temp.employee_count}}</td>
-        <td>{{temp.comment}}</td>
+        <td>{{temp.id}} </td>
+        <td>{{temp.created}}</td>
+        <td>{{temp.customer.subdivision.title}}</td>
+        <td>{{temp.date_applications}}</td>
+        <td>{{temp.status}}</td>
+        <td><a href="{% url 'application_detail' temp.id  %}">Подробнее</a></td>
       </tr>
      {% endfor %}
    </tbody>

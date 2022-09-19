@@ -1,12 +1,10 @@
-{% extends '_base.html' %}
-{% block title %}Авторизация{% endblock title %}
-{%block content%}
 <div class="reg">
-  <h1 class = "title-page">Авторизация</h1>
+  <div class="reg_in">
+  <h1 class = "title-page">Портал Военторг</h1>
   <form action="{% url 'login' %}" method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit" class="btn btn-dark" id="submit">Войти</button>
   </form>
+    </div>
   </div>
-{% endblock content %}

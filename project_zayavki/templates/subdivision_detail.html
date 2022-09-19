@@ -2,10 +2,83 @@
 {% block title %}Обекты{% endblock title %}
 {%block content%}
 <h1 class = "title-page">Объекты</h1>
-<p>Выберите объект</p>
-    <ul>
-    {% for obj in objects_sub %}
-        <li><a class="text-decoration-none" href="{% url 'objects_application' obj.id  %}">{{obj.title}}</a></li>
-    {%endfor%}
-    </ul>
+<!--<p>Выберите объект</p>-->
+<!--    <ul>-->
+<!--    {% for obj in objects_sub %}-->
+<!--        <li><a class="text-decoration-none" href="{% url 'objects_application' obj.id  %}">{{obj.title}}</a></li>-->
+<!--    {%endfor%}-->
+<!--    </ul>-->
+
+<h1>Создать заявку</h1>
+<!--<table class="table" >-->
+<!--   <tr>-->
+<!--    <th>Номер</th>-->
+<!--    <th>Объект</th>-->
+<!--    <th>Сотрудник</th>-->
+<!--    <th>Кол-во</th>-->
+<!--    <th>Комментарий</th>-->
+<!--   </tr>-->
+<!--     <form id="form-container" action="" class="postcard" method="post">{% csrf_token %}-->
+<!--         {{ formset.management_form }}-->
+<!--            {% for form in formset %}-->
+<!--         <div class="div_form">-->
+<!--            <td>{{ forloop.counter }}</td>-->
+<!--            <td>{{form.facility}}</td>-->
+<!--            <td>{{form.employee}}</td>-->
+<!--            <td>{{form.count_employee}}</td>-->
+<!--            <td>{{form.comment}}</td>-->
+<!--         </div>-->
+<!--            {% endfor %}-->
+<!--        <button id="add-form" type="button">+</button>-->
+<!--         <label for="date">Выберите дату: <input type="date" id="date" name="date" value="{{date_now}}"></label>-->
+<!--        <input type="submit" class="btn btn-dark btn_form" value="Создать заявку">-->
+<!--      </form>-->
+<!--   </table>-->
+<!--<div>-->
+<form id="form-container" method="POST">
+    {% csrf_token %}
+{{ formset.management_form }}
+{% for form in formset %}
+<div class="div_form">
+        <label>Название услуги</label>
+        <label>Кол-во</label>
+        <label>Объект</label>
+            {{form.facility}}
+            {{form.employee}}
+            {{form.count_employee}}
+            {{form.comment}}
+</div>
+   {% endfor %}
+<!--        <button id="add-form" type="button">+</button> -->
+    <a href="#" id="add-form" ><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
+</svg></a>
+        <input type="date" name="date">
+        <button type="submit" >Создать</button>
+</form>
+<!--    </div>-->
+<script>
+        let birdForm = document.querySelectorAll(".div_form")
+        let container = document.querySelector("#form-container")
+        let addButton = document.querySelector("#add-form")
+        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+
+        let formNum = birdForm.length-1
+        addButton.addEventListener('click', addForm)
+
+        function addForm(e){
+            e.preventDefault()
+
+            let newForm = birdForm[0].cloneNode(true)
+            let formRegex = RegExp(`form-(\\d){1}-`,'g')
+
+            formNum++
+            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
+            container.insertBefore(newForm, addButton)
+            totalForms.setAttribute('value', `${formNum+1}`)
+
+       }
+
+</script>
+
 {%endblock content%}

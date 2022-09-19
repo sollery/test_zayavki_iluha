@@ -2,10 +2,10 @@
  Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
-
+data_secret.py
 # C extensions
 *.so
-data_secret.py
+
 # Distribution / packaging
 bin/
 build/
