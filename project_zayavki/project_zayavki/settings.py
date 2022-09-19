@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','127.0.0.1','sollery.pythonanywhere.com']
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
 AUTHENTICATION_BACKENDS = ['accounts.backends.EmailBackend']
@@ -120,11 +120,11 @@ LOGOUT_REDIRECT_URL = "login"
 
 EMAIL_SUBJECT_PREFIX = '[Zeh-shop]'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-EMAIL_PORT = 465
-EMAIL_HOST = 'smtp.yandex.ru'
-EMAIL_HOST_USER = 'ilushamdmaa@Yandex.ru'
-EMAIL_HOST_PASSWORD = pw
-EMAIL_USE_SSL = True
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST_USER = "ilyazakharovwow@gmail.com"
+EMAIL_HOST_PASSWORD = 'pamitewyeeizoaff'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
 ADMINS = [
     ('ilya_adm', 'ilushamdmaa@yandex.ru')
 ]

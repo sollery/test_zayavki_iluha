@@ -1,5 +1,8 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/test.css' %}">
 <div class="reg">
   <div class="reg_in">
+  <img class="logo_reg" src="https://retail.oaovoentorg.ru/netcat_files/c/logo_retail.png">
   <h1 class = "title-page">Портал Военторг</h1>
   <form action="{% url 'login' %}" method="post">
     {% csrf_token %}

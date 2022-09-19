@@ -69,7 +69,6 @@
  <body>
  <h1>Заявка на услуги</h1>
     <h3>Дата: {{date}}</h3>
-    <h3>Объект: {{facality}}</h3>
  <h3>
     Заказчик: {{fio}}
 </h3>
@@ -94,7 +93,7 @@
    <tbody>
      {% for temp in data %}
         <td>{{ forloop.counter }} </td>
-        <td>{{temp.data_application}}</td>
+        <td>{{temp.date_application}}</td>
         <td>{{temp.facility}}</td>
         <td>{{temp.employee}}</td>
         <td>{{temp.employee_count}}</td>

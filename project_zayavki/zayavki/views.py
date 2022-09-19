@@ -15,20 +15,21 @@ from .send_email_for_customer import send_email_customer
 
 def subdivision_objects(request,pk):
     ApplicationTestFormset = formset_factory(ApplicationTestForm)
+    date_now = datetime.today().strftime('%Y-%m-%d')
     formset = ApplicationTestFormset(
         form_kwargs={
             'user': request.user,
         }
     )
     if request.method == 'POST':
-
+        app_id = ''
         ApplicationTestFormset = formset_factory(ApplicationTestForm)
         formset = ApplicationTestFormset(request.POST,form_kwargs={'user': request.user})
         data_date= request.POST['date']
         customer = CustomUser.objects.get(pk=request.user.id)
         if formset.is_valid():
             app_id = ListApplication.objects.create(customer=customer, date_applications=data_date,
-                                                    subdivision=customer.subdivision, )
+                               subdivision=customer.subdivision, )
             for form in formset:
                 # extract name from each form and save
                 facility = form.cleaned_data.get('facility')
@@ -43,6 +44,9 @@ def subdivision_objects(request,pk):
                                                            employee=emp, employee_count=emp_count,
                                                            subdivision=customer.subdivision,
                                                            comment=comment,application_id=app_id)
+
+        data_m = ApplicationTest.objects.filter(customer=customer, date_application=data_date, employee_count__gt=0,application_id= app_id)
+        send_email_customer(data_m, customer.email, date_now, customer.fio,customer.position)
         return redirect('zayavki_list')
     return render(request,'subdivision_detail.html',{'formset':formset})
 
