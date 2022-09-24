@@ -1,46 +1,9 @@
-.title-page {
-    text-align: center;
-    margin-bottom:3%;
-}
-
-.table {
-    text-align: center;
-
-}
-
-.btn_form {
-    margin-left:30px;
-    margin-bottom:10px;
-}
-
-.reg {
-    text-align: center;
-    margin-top: 10%;
-    border: 2px solid black;
-    height: 400px;
-    width: 500px;
-    margin-left:35%;
-
-}
-
-.reg_in {
-    margin-top: 5%;
-}
-
-.div_form {
-   text-align: center;
-   margin-left: 10%;
-
-}
-
 body {
     background-color:rgb(124, 148, 52);
 }
 
 .sidenav {
-    height: 100%;
-    width: 280px;
-    position: fixed;
+    height: 100vh;
     z-index: 1;
     top: 0;
     left: 0;
@@ -60,13 +23,6 @@ body {
 .sidenav a:hover {
     color: #f1f1f1;
 }
-.container {
-    margin-left: 400px;
-    padding: 0px 10px;
-    text-align: center;
-    margin-top:3%;
-}
-
 .lk_icons a {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
@@ -81,6 +37,8 @@ body {
 
 .lk_icons {
     display: flex;
+    margin-top: 10%;
+    margin-left: 10%;
 }
 
 a {
@@ -107,6 +65,126 @@ a:hover {
     display:flex;
 }
 .logo {
-    margin-left:15%;
+    margin-left:10%;
     margin-bottom:10%;
+}
+
+.error{
+    color:red;
+}
+
+.form_div{
+  display: table-row;
+
+}
+
+.div_form {
+    display: table-row;
+}
+
+.container_form {
+    display: table;
+	width: 100%;
+	border: none;
+	border-collapse: separate;
+	border-spacing: 5px;
+
+
+}
+.form_buttons{
+    display:flex;
+    justify-content: space-between;
+    width:95%;
+    position:absolute;
+}
+
+.form-field {
+    display: table-cell;
+	width: 20%;
+	vertical-align: top;
+	padding: 0;
+}
+.btn_form {
+    position:absolute;
+    margin-left: 500px;
+}
+
+.table {
+  border: 0.5px solid #000000;
+}
+.table-bordered > thead > tr > th,
+.table-bordered > tbody > tr > th,
+.table-bordered > tfoot > tr > th,
+.table-bordered > thead > tr > td,
+.table-bordered > tbody > tr > td,
+.table-bordered > tfoot > tr > td {
+   border: 0.5px solid #000000;
+}
+.mypagination {
+    display:flex;
+    justify-content: center;
+    align-items: center
+}
+
+.count_rows {
+    margin-left: 38%;
+    text-align: center;
+    margin-top:20%;
+
+}
+
+label {
+    font-side:bold;
+}
+
+.btn_count{
+    margin-top: 3%;
+}
+
+.delete {
+    color:red;
+}
+
+li {
+    list-style-type: none; /* Убираем маркеры */
+}
+
+ul {
+    padding-left: 0; /* Сдвигаем список влево */
+}
+
+.reg {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
+    border: 2px solid black;
+    border-radius:10%;
+    height: 430px;
+    width: 500px;
+
+}
+
+.reg_in {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 0 auto;
+    text-align: center;
+}
+.btn_reg {
+    margin-top: 2%;
+}
+
+.text {
+    display:none;
+}
+.title-page {
+    margin-bottom: 3%;
+    margin-top: 3%;
+
+}
+.date_div {
+    margin-bottom:1%;
+    cursor:pointer;
 }

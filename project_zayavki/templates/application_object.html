@@ -28,11 +28,9 @@
          </td>
             <td><textarea id="w3review" name="{{emp.employee.id}}" style="width:250px; height:80px;"></textarea></td>
             <td>{{temp.comment}}</td>
+
           </tr>
             {% endfor %}
-          <label for="date">Выберите дату: <input type="date" id="date" name="date" value="{{date_now}}"
-       min="{{date_now}}"></label>
-         <input type="submit" class="btn btn-dark btn_form" value="Создать заявку">
       </form>
    </tbody>
    </table>
@@ -49,9 +47,6 @@
 <!--                <input type="submit" value="Создать заявку">-->
 <!--            </div>-->
 <!--   </form>-->
-        {%else%}
-        <h1>Вы еще не добавили к объекту рабочих</h1>
-        {%endif%}
 
 
 {%endblock content%}

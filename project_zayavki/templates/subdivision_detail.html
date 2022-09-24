@@ -1,84 +1,52 @@
 {% extends '_base.html' %}
 {% block title %}Обекты{% endblock title %}
 {%block content%}
-<h1 class = "title-page">Объекты</h1>
-<!--<p>Выберите объект</p>-->
-<!--    <ul>-->
-<!--    {% for obj in objects_sub %}-->
-<!--        <li><a class="text-decoration-none" href="{% url 'objects_application' obj.id  %}">{{obj.title}}</a></li>-->
-<!--    {%endfor%}-->
-<!--    </ul>-->
-
-<h1>Создать заявку</h1>
-<!--<table class="table" >-->
-<!--   <tr>-->
-<!--    <th>Номер</th>-->
-<!--    <th>Объект</th>-->
-<!--    <th>Сотрудник</th>-->
-<!--    <th>Кол-во</th>-->
-<!--    <th>Комментарий</th>-->
-<!--   </tr>-->
-<!--     <form id="form-container" action="" class="postcard" method="post">{% csrf_token %}-->
-<!--         {{ formset.management_form }}-->
-<!--            {% for form in formset %}-->
-<!--         <div class="div_form">-->
-<!--            <td>{{ forloop.counter }}</td>-->
-<!--            <td>{{form.facility}}</td>-->
-<!--            <td>{{form.employee}}</td>-->
-<!--            <td>{{form.count_employee}}</td>-->
-<!--            <td>{{form.comment}}</td>-->
-<!--         </div>-->
-<!--            {% endfor %}-->
-<!--        <button id="add-form" type="button">+</button>-->
-<!--         <label for="date">Выберите дату: <input type="date" id="date" name="date" value="{{date_now}}"></label>-->
-<!--        <input type="submit" class="btn btn-dark btn_form" value="Создать заявку">-->
-<!--      </form>-->
-<!--   </table>-->
-<!--<div>-->
-<form id="form-container" method="POST">
+{% load static %}
+<h1 class="title-page">Создать заявку</h1>
+<h1 class="error"><h3 class="error">{{ formset.non_form_errors }}</h3></h1>
+<h1 class="error"><h3 class="error">{{error}}</h3></h1>
+<form id="form-container" class="container_form " method="POST">
     {% csrf_token %}
+    <div class="date_div">
+        <input data-toggle="tooltip"  title="Выберите дату" class = form-control type="date" value="{{date_now}}" min="{{date_now}}" name="date">
+    </div>
+
 {{ formset.management_form }}
 {% for form in formset %}
 <div class="div_form">
-        <label>Название услуги</label>
-        <label>Кол-во</label>
-        <label>Объект</label>
-            {{form.facility}}
-            {{form.employee}}
-            {{form.count_employee}}
-            {{form.comment}}
+        <div class="form-field">
+             <div>
+                <h6>{{form.facility.label}}</h6>{{form.facility}}
+             </div>
+        </div>
+         <div class="form-field">
+             <div>
+                <h6>{{form.employee.label}}</h6>{{form.employee}}
+             </div>
+        </div>
+        <div class="form-field">
+             <div>
+                <h6>{{form.count_employee.label}}</h6>{{form.count_employee}}
+             </div>
+        </div>
+        <div class="form-field">
+            <div>
+            <h6>{{form.comment.label}}</h6>{{form.comment}}
+                {% if formset.can_delete %}
+                <h6 class="delete">{{ form.DELETE }} Не учитывать</h6>
+                {%endif%}
+            </div>
+        </div>
 </div>
+
    {% endfor %}
-<!--        <button id="add-form" type="button">+</button> -->
-    <a href="#" id="add-form" ><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+
+    <a data-toggle="tooltip"  title="Добавить еще одну форму" href="#" id="add-form" ><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
 </svg></a>
-        <input type="date" name="date">
-        <button type="submit" >Создать</button>
+<button class="btn btn-dark btn_form" type="submit" onclick="document.body.style.cursor='wait'; return true;">Оформить</button>
+    <h1 class="text ">Форма отправляется</h1>
 </form>
-<!--    </div>-->
-<script>
-        let birdForm = document.querySelectorAll(".div_form")
-        let container = document.querySelector("#form-container")
-        let addButton = document.querySelector("#add-form")
-        let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
 
-        let formNum = birdForm.length-1
-        addButton.addEventListener('click', addForm)
-
-        function addForm(e){
-            e.preventDefault()
-
-            let newForm = birdForm[0].cloneNode(true)
-            let formRegex = RegExp(`form-(\\d){1}-`,'g')
-
-            formNum++
-            newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`)
-            container.insertBefore(newForm, addButton)
-            totalForms.setAttribute('value', `${formNum+1}`)
-
-       }
-
-</script>
-
+<script src="{% static 'js/form_ap.js' %}"></script>
 {%endblock content%}

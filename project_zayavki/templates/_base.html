@@ -19,15 +19,16 @@
 <!--{% if user.is_superuser %}-->
 <!--          <a class="nav-link" href ="http://localhost:8000/admin/">Админка</a>-->
 <!--{% endif %}-->
-
-<div class="sidenav">
+<div class="container-fluid">
+<div class="row">
+<div class="sidenav col-md-2 text-center position-sticky">
     <img class="logo" src="https://retail.oaovoentorg.ru/netcat_files/c/logo_retail.png">
     <a class="nav-link"  href="{% url 'private_office' user.id  %}">Главная</a>
     {% if user.is_superuser %}
         <a class="nav-link" href ="http://localhost:8000/admin/">Админка</a>
         <a class="nav-link" href ="{% url 'zayavki_list' %}">Просмотр заявок</a>
     {%else%}
-    <a class="text-decoration-none" href="{% url 'subdivision_objects' user.id  %}">Оформить заявку</a>
+    <a class="text-decoration-none" href="{% url 'count_service' %}">Оформить заявку</a>
     <a href ="{% url 'zayavki_list' %}">Просмотр заявок</a>
     {%endif%}
         {% if user.is_authenticated %}
@@ -36,15 +37,21 @@
     <a href="{% url 'login' %}">Войти</a>
         {% endif %}
 </div>
-    <div class="container">
+<div class="col-md-10 text-center">
             {% block content %}
-
             {% endblock content %}
-    </div>
+</div>
+</div>
+</div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!--    <script src="{% static 'js/base1.js' %}"></script>-->
 <!--    <script src="{% static 'js/my_jss.js' %}"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready (function (){
+        $('[data-toggle="tooltip"]').tooltip ();
+      });
+    </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>

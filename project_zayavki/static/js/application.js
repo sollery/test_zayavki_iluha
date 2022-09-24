@@ -26,5 +26,4 @@ change_buttons.forEach((e) => {
     }
 });
 
-console.log('test')
 

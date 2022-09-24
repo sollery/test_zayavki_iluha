@@ -9,11 +9,13 @@ from .models import CustomUser, Subdivision
 from .forms import LoginForm, RegisterForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import logout
-
+from django.core.paginator import Paginator
 
 class LoginView(auth_views.LoginView):
     form_class = LoginForm
     template_name = 'accounts/login.html'
+
+
 
 
 class RegisterView(generic.CreateView):
@@ -47,10 +49,17 @@ def private_office(request,pk):
 def zayavki_list(request):
     if request.user.is_superuser:
         zayavki = ListApplication.objects.all().order_by('-created')
-        return render(request, 'zayavki_list.html', {'zayavki': zayavki})
+        paginator = Paginator(zayavki, 15)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request, 'zayavki_list.html', {'page_obj': page_obj,'zayavki':zayavki})
     zayavki = ListApplication.objects.filter(customer=request.user.pk).order_by('-created')
-    print(zayavki)
-    return render(request,'zayavki_list.html',{'zayavki':zayavki})
+    paginator = Paginator(zayavki, 15)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    print(paginator)
+    return render(request,'zayavki_list.html',{'page_obj': page_obj,'zayavki':zayavki})
 
 
 def application_detail(request,pk):
@@ -82,3 +91,5 @@ def status_data(request):
 
 # def customer_zayavki(request,pk):
 #     zayavki = ApplicationTest.objects.filter(customer=request.user.pk)
+
+

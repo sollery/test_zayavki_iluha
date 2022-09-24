@@ -64,6 +64,14 @@ class ListApplication(models.Model):
             return False
         else:
             return True
+
+    def color_status(self):
+        if self.status == "Согласованно":
+            return "success"
+        elif self.status == "Не согласованно":
+            return "danger"
+
+
 class ApplicationTest(models.Model):
     customer = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, related_name='customer_application',null=True)
     date_application = models.DateField('Дата заявки')
@@ -81,7 +89,7 @@ class ApplicationTest(models.Model):
 
     def __str__(self):
         return "заказчик: {} объект: {} дата заказа услуг: {} дата создания заявки: {}"\
-            .format(self.customer.fio,self.facility.title,self.date_application,self.created)
+            .format(self.customer.fio,self.facility,self.date_application,self.created)
 
     class Meta:
         verbose_name = 'Заявка'

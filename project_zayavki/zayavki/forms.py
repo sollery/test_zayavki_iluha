@@ -1,64 +1,11 @@
 
 
 from django import forms
-from django.forms import formset_factory, ModelForm, TextInput, NumberInput, Select
+from django.core.exceptions import ValidationError
+from django.forms import formset_factory, ModelForm, TextInput, NumberInput, Select, BaseFormSet
 from django.http import request
 
 from .models import ApplicationTest, Facility, EmployeeInSubdivision, Employee
-
-
-# class ApplicationTestForm(ModelForm):
-#     class Meta:
-#         model = ApplicationTest
-#         fields = ('facility', 'employee', 'employee_count')
-
-    # def __init_(self, id_sub):
-    #     super(ApplicationTestForm, self).__init__(self, id_sub)
-    #     self.fields['facility'] = Facility.objects.filter(subdivision__id=id_sub)
-    #     self.fields['employee'] = EmployeeInSubdivision.objects.filter(subdivision_id=id_sub)
-    #     self.fields['employee_count'] = [(i,i) for i in range(0,51)]
-    #
-
-
-
-
-    # rabotniki = [(r.id, r.title) for r in Employee.objects.filter(subdivision__id=id_)]
-    # rabotniki_count = [(i,i) for i in range(0,50)]
-    # obj = [(r.id, r.title) for r in Facility.objects.filter(user_subdivision__id=id_)]
-    #
-    #
-    # name = forms.CharField(widget=forms.Select(choices=rabotniki))
-    # count = forms.IntegerField(widget=forms.Select(choices=rabotniki_count))
-    # obj_ = forms.CharField(widget=forms.Select(choices=obj))
-# class ApplicationTestForm(forms.Form):
-#     class Meta:
-#         model = ApplicationTest
-#         fields = ('facility', 'employee', 'employee_count')
-#
-#     def __init__(self, *args, **kwargs):
-#         user = kwargs.pop('user', None)
-#         super().__init__(*args, **kwargs)
-#         if user:
-#             self.fields['facility'].queryset = Facility.objects.filter(subdivision__user=user)
-#             self.fields['employee'].queryset = Employee.objects.filter(subdivision__user=user)
-#             self.employee_count = [(i,i) for i in range(0,50)]
-#
-#     widgets = {
-#         "facility": Select(attrs={
-#             'placeholder': 'Рабочии',
-#         }),
-#         "employee": Select(attrs={
-#             'class': 'myfield',
-#             'placeholder': 'Ваша фамилия'
-#         }),
-#         "employee_count": Select(attrs={
-#             'class': 'myfield',
-#             'placeholder': 'Ваша почта'
-#         }),
-#
-#     }
-#
-# ApplicationTestFormset = formset_factory(ApplicationTestForm, extra=6)
 
 
 class CustomModelMultipleChoiceField(forms.ModelMultipleChoiceField):
@@ -72,9 +19,12 @@ class ApplicationTestForm(forms.ModelForm):
         model = ApplicationTest
         fields = ['facility','employee','count_employee','comment']
         widgets = {
-            'comment': forms.Textarea(attrs={'rows': 1, 'cols': 60}),
-        }
+            'comment': forms.Textarea(attrs={'rows': 3, 'cols': 10,'placeholder': 'Введите комментарий'}),
 
+        }
+        labels = {'facility': 'Объект', 'employee': 'Специальность', 'count_employee': 'Кол-во',
+                  'comment' :'Коммент'}
+        help_text = {'text': 'Любую абракадабру', 'group': 'Из уже существующих'}
 
     def __init__(self, *args, **kwargs):
         user = kwargs.pop('user', None)
@@ -82,52 +32,82 @@ class ApplicationTestForm(forms.ModelForm):
         if user:
             self.fields['facility'].queryset = Facility.objects.filter(subdivision_id=user.subdivision.id)
             self.fields['employee'].queryset = Employee.objects.filter(subdivision_id=user.subdivision.id)
-            self.fields['facility'].empty_label = 'Выберите'
-            self.fields['employee'].empty_label = 'Выберите'
-            self.fields['comment'].initial = 'Введите текст'
-
+            self.fields['facility'].empty_label = 'Выберите объект'
+            self.fields['employee'].empty_label = 'Выберите услугу'
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'form-control'
 
 
 
 
     def clean(self):
-        # data from the form is fetched using super function
         super(ApplicationTestForm, self).clean()
-
-        # extract the username and text field from the data
         facility = self.cleaned_data.get('facility')
         employee = self.cleaned_data.get('employee')
+        if employee is None and facility is not None:
+            raise ValidationError(f"Для объекта {facility.title} не была указанна специальность.")
+        if facility is None and employee is not None:
+            raise ValidationError(f"Для специальности {employee.title} не был указан объект.")
+        if facility is None and employee is None:
+            raise ValidationError(f"У вас есть пустые поля")
 
-        # conditions to be met for the username length
-        if facility == 'Выберите':
-            self._errors['facility'] = self.error_class([
-                'Заполните поле'])
-        if employee == 'Выберите':
-            self._errors['employee'] = self.error_class([
-                'Заполните поле'])
 
-        # return any errors if found
-        return self.cleaned_data
-    # name = forms.CharField()
-    # date = forms.DateInput()
+    # def clean_facility(self):
+    #     facility = self.cleaned_data.get("facility")
+    #     employee = self.cleaned_data.get("employee")
+    #     if facility is None:
+    #         raise ValidationError(
+    #             f"Для специальности {employee.title} не был указан объект.")
+    #
+    #
+    #
+    # def clean_emploee(self):
+    #     facility = self.cleaned_data.get("facility")
+    #     employee = self.cleaned_data.get("employee")
+    #
 
-    # facility = CustomModelMultipleChoiceField(
-    #     queryset=None,
-    #     widget=forms.CheckboxSelectMultiple
-    # )
+    #
+    #     # return any errors if found
+    #     return self.cleaned_data
 
-    # employee = CustomModelMultipleChoiceField(
-    #     queryset=None,
-    #     widget=forms.CheckboxSelectMultiple
-    # )
     obj = [(i,i) for i in range(0,51)]
-    count_employee = forms.CharField(widget=forms.Select(choices=obj))
+    count_employee = forms.CharField(widget=forms.Select(choices=obj),label='Кол-во')
+
+
+class BaseApplicationTestFormset(BaseFormSet):
+    def clean(self):
+        """Checks that no two articles have the same title."""
+        if any(self.errors):
+            return
+        facility_emps = []
+        count = 0
+        for form in self.forms:
+            if self.can_delete and self._should_delete_form(form):
+                count += 1
+                continue
+            employee = form.cleaned_data.get('employee')
+            facility = form.cleaned_data.get('facility')
+            count_employee = form.cleaned_data.get('count_employee')
+            if [employee.title,facility.title] in facility_emps:
+                raise ValidationError(f"Для объекта {facility.title} была продублирована специальность {employee.title}.")
+            facility_emps.append([employee.title, facility.title])
+            if int(count_employee) == 0:
+                raise ValidationError(
+                    f"Для объекта {facility.title} не было указано кол-во {employee.title}.")
 
 
 
+
+
+
+
+
+class CountServiceForm(forms.Form):
+    count_s = [(i, i) for i in range(1, 51)]
+    count_service = forms.CharField(widget=forms.Select(choices=count_s),label='Выберите кол-во строк')
 
 # ApplicationTestFormset = formset_factory(ApplicationTestForm, extra=6)
-# class ApplicationTestForm(forms.Form,):
+# class ApplicationTestForm(class ApplicationTestForm(forms.Form,):,):
 #
 #     def __init_(self, id_sub):
 #         super(ApplicationTestForm, self).__init__(self, id_sub)

@@ -1,8 +1,9 @@
-from django.forms import formset_factory, forms
+from django.core.exceptions import ValidationError
+from django.forms import formset_factory, forms, BaseFormSet
 from django.shortcuts import render, redirect
 from accounts.models import CustomUser
 from datetime import datetime
-from .forms import ApplicationTestForm
+from .forms import ApplicationTestForm, CountServiceForm, BaseApplicationTestFormset
 from django.forms import formset_factory
 from .models import *
 from .send_email_for_customer import send_email_customer
@@ -13,8 +14,12 @@ from .send_email_for_customer import send_email_customer
 #         self.user = user
 #         super().__init__(*args, **kwargs)
 
-def subdivision_objects(request,pk):
-    ApplicationTestFormset = formset_factory(ApplicationTestForm)
+
+# ArticleFormSet = formset_factory(ArticleForm, formset=BaseArticleFormSet)
+
+def subdivision_objects(request,pk,count):
+    ApplicationTestFormset = formset_factory(ApplicationTestForm,can_delete = True,extra=count,
+                                             formset=BaseApplicationTestFormset,min_num = 1, validate_min = True)
     date_now = datetime.today().strftime('%Y-%m-%d')
     formset = ApplicationTestFormset(
         form_kwargs={
@@ -22,35 +27,55 @@ def subdivision_objects(request,pk):
         }
     )
     if request.method == 'POST':
-        app_id = ''
-        ApplicationTestFormset = formset_factory(ApplicationTestForm)
+        ApplicationTestFormset = formset_factory(ApplicationTestForm,
+                                                 can_delete=True,formset=BaseApplicationTestFormset,min_num = 1, validate_min = True)
         formset = ApplicationTestFormset(request.POST,form_kwargs={'user': request.user})
-        data_date= request.POST['date']
-        customer = CustomUser.objects.get(pk=request.user.id)
+        data_date = request.POST['date']
+        customer = CustomUser.objects.get(pk=pk)
+        error = 'Проверьте свои поля'
+        date_now = datetime.today().strftime('%Y-%m-%d')
+        apps = []
         if formset.is_valid():
             app_id = ListApplication.objects.create(customer=customer, date_applications=data_date,
-                               subdivision=customer.subdivision, )
+                                                    subdivision=customer.subdivision)
+
             for form in formset:
-                # extract name from each form and save
+                print(form)
                 facility = form.cleaned_data.get('facility')
                 emp = form.cleaned_data.get('employee')
                 emp_count = form.cleaned_data.get('count_employee')
                 comment = form.cleaned_data.get('comment')
-                if int(emp_count) < 1:
+                if emp is None or facility is None or int(emp_count) < 1:
                     continue
-                print(facility)
-                print(emp)
-                ApplicationTest.objects.create(customer=customer, date_application=data_date, facility=facility,
+                m = ApplicationTest.objects.create(customer=customer, date_application=data_date, facility=facility,
                                                            employee=emp, employee_count=emp_count,
                                                            subdivision=customer.subdivision,
                                                            comment=comment,application_id=app_id)
+                apps.append(m)
+                print(apps)
 
+        else:
+            try:
+                error = formset.errors[0]['__all__']
+            except:
+                pass
+            return render(request, "subdivision_detail.html", {'formset': formset,'date_now':date_now,'error':error})
         data_m = ApplicationTest.objects.filter(customer=customer, date_application=data_date, employee_count__gt=0,application_id= app_id)
         send_email_customer(data_m, customer.email, date_now, customer.fio,customer.position)
         return redirect('zayavki_list')
-    return render(request,'subdivision_detail.html',{'formset':formset})
+    return render(request,'subdivision_detail.html',{'formset':formset,'date_now': date_now})
 
+def count_service(request):
+    form = CountServiceForm()
+    if request.method == 'POST':
+        user_id = request.user.id
+        form = CountServiceForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            count = int(form.cleaned_data.get('count_service'))-1
 
+            return redirect(f'/zayavki/subdivision/{user_id}/{count}/')
+    return render (request,'count_service.html', {'form':form})
 # Create your views here.
 
 # def object_application(request,pk):

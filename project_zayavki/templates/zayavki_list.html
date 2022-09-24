@@ -1,38 +1,9 @@
 {% extends '_base.html' %}
 {% block title %}Список заявок{% endblock title %}
 {%block content%}
-<h1 class = "title-page">Заявки</h1>
-<!--{%if zayavki%}-->
-<!--<table class="table">-->
-<!--  <thead>-->
-<!--   <tr>-->
-<!--    <th>Номер</th>-->
-<!--    <th>Дата оказания услуг</th>-->
-<!--    <th>Должность</th>-->
-<!--     <th>Заказчик</th>-->
-<!--    <th>Объект Заказчика</th>-->
-<!--    <th>Количество услуг</th>-->
-<!--    <th>Обоснование заявки</th>-->
-<!--   </tr>-->
-<!--  </thead>-->
-<!--   <tbody>-->
-<!--     {% for temp in zayavki %}-->
-<!--        <td>{{forloop.counter}} </td>-->
-<!--        <td>{{temp.data_application}}</td>-->
-<!--        <td>{{temp.customer.position}}</td>-->
-<!--        <td>{{temp.customer.fio}}</td>-->
-<!--        <td>{{temp.employee}}</td>-->
-<!--        <td>{{temp.employee_count}}</td>-->
-<!--        <td>{{temp.comment}}</td>-->
-<!--      </tr>-->
-<!--     {% endfor %}-->
-<!--   </tbody>-->
-<!--   </table>-->
-<!--{%else%}-->
-<!--<h1>ваш список пуст</h1>-->
-<!--{%endif%}-->
+<h1 class = "title-page">Cписок заявок: {{user.subdivision.title}}</h1>
 {%if zayavki%}
-<table class="table">
+<table  class="table table-bordered">
   <thead>
    <tr>
     <th>Номер</th>
@@ -43,18 +14,43 @@
      <th></th>
    </tr>
   </thead>
-   <tbody>
-     {% for temp in zayavki %}
-        <td>{{temp.id}} </td>
+   <tbody >
+     {% for temp in page_obj %}
+        <td>{{ forloop.counter }}</td>
         <td>{{temp.created}}</td>
         <td>{{temp.customer.subdivision.title}}</td>
         <td>{{temp.date_applications}}</td>
-        <td>{{temp.status}}</td>
+     {% if not temp.check_status %}
+        <td class="bg-warning" style="font-weight:bold">{{temp.status}}</td>
+     {%else%}
+        <td class="bg-{{temp.color_status}}" style="font-weight:bold">{{temp.status}}</td>
+     {%endif%}
         <td><a href="{% url 'application_detail' temp.id  %}">Подробнее</a></td>
       </tr>
      {% endfor %}
    </tbody>
    </table>
+<nav aria-label="Page navigation example">
+    <ul class="mypagination">
+        {% if page_obj.has_previous %}
+            <li><a href="?page=1">Начало</a></li>
+            <li><a href="?page={{ page_obj.previous_page_number }}"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+            </svg></a></li>
+        {% endif %}
+
+        <h5 class="">
+            стр {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+        </h5>
+
+        {% if page_obj.has_next %}
+         <li><a href="?page={{ page_obj.next_page_number }}"><svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-arrow-right-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+</svg></a></li>
+        <li><a href="?page={{ page_obj.paginator.num_pages }}">Конец</a></li>
+        {% endif %}
+    </ul>
+</nav>
 {%else%}
 <h1>ваш список пуст</h1>
 {%endif%}

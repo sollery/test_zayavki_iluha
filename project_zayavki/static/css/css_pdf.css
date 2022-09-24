@@ -15,3 +15,109 @@ th {
 td {
    border: 1px solid black;
 }
+
+
+
+
+
+.btn_form {
+    margin-left:30px;
+    margin-bottom:10px;
+}
+
+.reg {
+    text-align: center;
+    margin-top: 10%;
+    border: 2px solid black;
+    height: 400px;
+    width: 500px;
+    margin-left:35%;
+
+}
+
+.reg_in {
+    margin-top: 5%;
+}
+
+.div_form {
+   text-align: center;
+   margin-left: 10%;
+
+}
+
+body {
+    background-color:rgb(124, 148, 52);
+}
+
+.sidenav {
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: rgb(101, 120, 43);
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    display: block;
+}
+
+.sidenav a:hover {
+    color: #f1f1f1;
+}
+
+
+.lk_icons a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    display: block;
+}
+
+.lk_icons a:hover {
+    color: #f1f1f1;
+}
+
+.lk_icons {
+    display: flex;
+}
+
+a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: black;
+    display: block;
+}
+
+a:hover {
+    color: #f1f1f1;
+}
+
+.arrow {
+    margin-right: 80%;
+    margin-bottom: 5%;
+}
+.header_icons {
+    display:flex;
+}
+
+.icons_approve {
+    display:flex;
+}
+.logo {
+    margin-left:15%;
+    margin-bottom:10%;
+}
+
+.error{
+    color:red;
+}
+
