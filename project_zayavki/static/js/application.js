@@ -3,8 +3,9 @@ var change_buttons = document.querySelectorAll('.change');
 change_buttons.forEach((e) => {
     e.onclick = function() {
          const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-            data = {'status': e.dataset.status,'app_id': e.dataset.appid,};
-            fetch('http://127.0.0.1:8000/status_data/',   {
+         const comment = document.querySelector('.comment_admin');
+            data = {'status': e.dataset.status,'app_id': e.dataset.appid,'comment': comment.value};
+            fetch('/status_data/',   {
                    method: 'POST',
                    body: JSON.stringify(data),
                    headers: {
@@ -20,10 +21,12 @@ change_buttons.forEach((e) => {
                        status.innerHTML = temp
                        div_mes.innerHTML = '';
                        div_mes.appendChild(status)
+                       comment.remove()
                        })
                    .catch(error => console.log(error))
                     console.log(e.dataset.status)
     }
 });
+
 
 

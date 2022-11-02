@@ -25,7 +25,7 @@
     <img class="logo" src="https://retail.oaovoentorg.ru/netcat_files/c/logo_retail.png">
     <a class="nav-link"  href="{% url 'private_office' user.id  %}">Главная</a>
     {% if user.is_superuser %}
-        <a class="nav-link" href ="http://localhost:8000/admin/">Админка</a>
+        <a class="nav-link" href ="http://127.0.0.1:8000/admin/">Админка</a>
         <a class="nav-link" href ="{% url 'zayavki_list' %}">Просмотр заявок</a>
     {%else%}
     <a class="text-decoration-none" href="{% url 'count_service' %}">Оформить заявку</a>
@@ -42,6 +42,8 @@
             {% endblock content %}
 </div>
 </div>
+    <div class="go-up" title="Вверх" id='ToTop'>↑</div>
+    <div class="go-down" title="Вниз" id='OnBottom'>↓</div>
 </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <!--    <script src="{% static 'js/base1.js' %}"></script>-->
@@ -53,6 +55,51 @@
       });
     </script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script>
+            $(function(){
+                 if ($(window).scrollTop()>="250") $("#ToTop").fadeIn("slow")
+                 $(window).scroll(function(){
+                  if ($(window).scrollTop()<="250") $("#ToTop").fadeOut("slow")
+                  else $("#ToTop").fadeIn("slow")
+                 });
+
+                 if ($(window).scrollTop()<=$(document).height()-"999") $("#OnBottom").fadeIn("slow")
+                 $(window).scroll(function(){
+                  if ($(window).scrollTop()>=$(document).height()-"999") $("#OnBottom").fadeOut("slow")
+                  else $("#OnBottom").fadeIn("slow")
+                 });
+
+                 $("#ToTop").click(function(){$("html,body").animate({scrollTop:0},"slow")})
+                 $("#OnBottom").click(function(){$("html,body").animate({scrollTop:$(document).height()},"slow")})
+                });
+<!--        const goTopBtn = document.getElementById('goTop')-->
+<!--                     // Изначально высота верхнего содержимого, загружаемого браузером, равна 0-->
+<!--                  let scrollTop = 0-->
+<!--                     // слушаем события прокрутки страницы-->
+<!--                  window.onscroll = () => {-->
+<!--                         // Получаем высоту верхнего содержимого, которое отображается в браузере-->
+<!--                    scrollTop = document.documentElement.scrollTop || document.body.scrollTop;-->
+<!--                         // Если высота свернутого содержимого больше 50, отобразить кнопку для возврата наверх;-->
+<!--                         // Если высота сворачиваемого содержимого меньше 50, скройте кнопку, чтобы вернуться наверх.-->
+<!--                    scrollTop > 50 ? (goTopBtn.style.display = 'block') : (goTopBtn.style.display = 'none')-->
+<!--                  }-->
+<!--                  goTopBtn.onclick = () => {-->
+<!--                         // Очищаем последний таймер-->
+<!--                    let timer = null;-->
+<!--                    clearInterval(timer);-->
+<!--                         // Создаем таймер и выполняем стрелочную функцию каждые 15 мсек.-->
+<!--                    timer = setInterval(()=>{-->
+<!--                             // Каждый раз, когда функция выполняется, scrollTop уменьшается на одну десятую-->
+<!--                      scrollTop -= scrollTop / 10;-->
+<!--                      window.scrollTo(0,scrollTop)-->
+<!--                             // Когда scrollTop меньше 2, напрямую устанавливаем scrollTop на 0 и очищаем таймер.-->
+<!--                      if(scrollTop<2){-->
+<!--                        window.scrollTo(0,0);-->
+<!--                        clearInterval(timer);-->
+<!--                      }-->
+<!--                    },15)-->
+<!--                  }-->
+                  </script>
 </body>
 </html>
 

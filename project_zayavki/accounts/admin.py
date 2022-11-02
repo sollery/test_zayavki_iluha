@@ -47,9 +47,9 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Subdivision)
 class SubdivisionAdmin(admin.ModelAdmin):
-    list_display = ['title']
+    list_display = ['title','id']
 
 
 @admin.register(Position)
-class SubdivisionAdmin(admin.ModelAdmin):
+class PositionAdmin(admin.ModelAdmin):
     list_display = ['title']

@@ -11,14 +11,16 @@
     <th>Подразделение</th>
      <th>Дата исполнения</th>
      <th>Статус</th>
-     <th></th>
+     <th>Инфо</th>
+     <th>Шаблон</th>
+     <th>Изменить</th>
    </tr>
   </thead>
    <tbody >
      {% for temp in page_obj %}
         <td>{{ forloop.counter }}</td>
         <td>{{temp.created}}</td>
-        <td>{{temp.customer.subdivision.title}}</td>
+        <td>{{temp.subdivision.title}}</td>
         <td>{{temp.date_applications}}</td>
      {% if not temp.check_status %}
         <td class="bg-warning" style="font-weight:bold">{{temp.status}}</td>
@@ -26,6 +28,10 @@
         <td class="bg-{{temp.color_status}}" style="font-weight:bold">{{temp.status}}</td>
      {%endif%}
         <td><a href="{% url 'application_detail' temp.id  %}">Подробнее</a></td>
+        <td><a href="{% url 'shablon_zayavki' temp.id temp.subdivision.id  %}">Сделать</a></td>
+        {% if temp.change_zayavki %}
+        <td><a href="{% url 'update_zayavki' temp.id temp.subdivision.id  %}">Редактировать</a></td>
+        {%endif%}
       </tr>
      {% endfor %}
    </tbody>

@@ -59,10 +59,15 @@ a:hover {
 }
 .header_icons {
     display:flex;
+    margin-bottom: 3%;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .icons_approve {
     display:flex;
+    justify-content: center;
+
 }
 .logo {
     margin-left:10%;
@@ -187,4 +192,43 @@ ul {
 .date_div {
     margin-bottom:1%;
     cursor:pointer;
+}
+
+.viza {
+    margin-top:3%;
+}
+
+.comment_admin {
+    width:30%;
+}
+.go-up,
+.go-down {
+  display:none;
+  position: fixed; /*позиционируем*/
+  right: 5px; /*указываем положение, если слева - left*/
+  z-index: 9999; /*показываем поверх все элементов на странице*/
+  background: rgb(101, 120, 43);
+  border: 2px solid black; /*толщина, стиль, цвет рамки*/
+  box-shadow: 0 10px 0.3em -0.1em rgba(0,0,6,0.5); /*тень*/
+  border-radius: 10px;
+  cursor: pointer;
+  color: black; /*цвет стрелок*/
+  text-align: center; /*выравнивание*/
+  font-size: 38px; /*размер стралок*/
+  opacity: .7; /*прозрачность*/
+  padding: 0 3px 3px 3px; /*отступы внутри*/
+  margin-bottom: 5px; /*отступ снизу (можно не указывать)*/
+  width: 48px; /*ширина кнопки*/
+  height: 60px; /*высота кнопки*/
+}
+.go-up {
+  bottom: 70px; /*положение от низа окна браузера*/
+}
+.go-down {
+  bottom: 10px;
+}
+/*стили при наведении курсора*/
+.go-down:hover,
+.go-up:hover {
+  opacity: 1;
 }

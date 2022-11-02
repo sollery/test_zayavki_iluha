@@ -23,6 +23,6 @@ class ApplicationTestAdmin(admin.ModelAdmin):
 
 @admin.register(ListApplication)
 class ListApplicationAdmin(admin.ModelAdmin):
-    list_display = ['customer','date_applications','subdivision','status','created']
+    list_display = ['id','customer','date_applications','subdivision','status','created','viza','comment']
 
 # Register your models here.

@@ -2,18 +2,29 @@
 {% block title %}Обекты{% endblock title %}
 {%block content%}
 {% load static %}
-<h1 class="title-page">Создать заявку</h1>
-<h1 class="error"><h3 class="error">{{ formset.non_form_errors }}</h3></h1>
-<h1 class="error"><h3 class="error">{{error}}</h3></h1>
+<h1 class="title-page">{{title}}</h1>
+<h1 class="error">{{ formset.non_form_errors }}</h1>
+<h1 class="error">{{error}}</h1>
 <form id="form-container" class="container_form " method="POST">
     {% csrf_token %}
     <div class="date_div">
-        <input data-toggle="tooltip"  title="Выберите дату" class = form-control type="date" value="{{date_now}}" min="{{date_now}}" name="date">
+        <h1 class="count_emp">Общее кол-во:</h1>
+        <input data-toggle="tooltip"  title="Выберите дату" class = form-control type="date" value="{{date_now}}" name="date">
+         <select name="viza_k" class = "form-control viza">
+            <option>Выберите визу</option>
+            {% for i in viza %}
+            <option >{{i}}</option>
+            {%endfor%}
+        </select>
     </div>
 
 {{ formset.management_form }}
 {% for form in formset %}
-<div class="div_form">
+    {% if form.prefix in my_check %}
+    <div class="div_form" hidden>
+    {%else%}
+        <div class="div_form">
+    {%endif%}
         <div class="form-field">
              <div>
                 <h6>{{form.facility.label}}</h6>{{form.facility}}
@@ -26,27 +37,28 @@
         </div>
         <div class="form-field">
              <div>
-                <h6>{{form.count_employee.label}}</h6>{{form.count_employee}}
+                <h6>{{form.employee_count.label}}</h6>{{form.employee_count}}
              </div>
         </div>
         <div class="form-field">
             <div>
             <h6>{{form.comment.label}}</h6>{{form.comment}}
                 {% if formset.can_delete %}
-                <h6 class="delete">{{ form.DELETE }} Не учитывать</h6>
+                <h6 class="delete" >{{ form.DELETE }} Не учитывать</h6>
                 {%endif%}
             </div>
         </div>
-</div>
+    </div>
 
    {% endfor %}
 
-    <a data-toggle="tooltip"  title="Добавить еще одну форму" href="#" id="add-form" ><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+    <a data-toggle="tooltip"  title="Добавить форму" href="#" id="add-form" ><svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3v-3z"/>
 </svg></a>
 <button class="btn btn-dark btn_form" type="submit" onclick="document.body.style.cursor='wait'; return true;">Оформить</button>
     <h1 class="text ">Форма отправляется</h1>
+    <input type="button" class="count_but_e btn btn-dark" value="посчитать">
 </form>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{% static 'js/form_ap.js' %}"></script>
 {%endblock content%}

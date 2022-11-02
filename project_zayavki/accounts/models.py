@@ -15,7 +15,7 @@ class Subdivision(models.Model):
 
 
 class Position(models.Model):
-    title = models.CharField('Должность', max_length=50, default='')
+    title = models.CharField('Должность', max_length=100, default='')
 
     def __str__(self):
         return str(self.title)
